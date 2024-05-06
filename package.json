@@ -1,0 +1,24 @@
+{
+  "name": "taskforge",
+  "version": "1.0.0",
+  "description": "A real-time collaboration platform aimed at helping individuals and teams organize their tasks, manage projects, and collaborate effectively",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farahBoughalem/TaskForge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/farahBoughalem/TaskForge/issues"
+  },
+  "homepage": "https://github.com/farahBoughalem/TaskForge#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.3.3",
+    "morgan": "^1.10.0"
+  }
+}
