@@ -1,14 +1,13 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const config = require('./config');
+const { mongoURI } = require('./config');
 
 // create express app
 const app = express();
 
 // connect to mongodb & listen to requests
-const dbURI = config.mongoURI;
-mongoose.connect(dbURI)
+mongoose.connect(mongoURI)
   .then(result => app.listen(3000))
   .catch(err => console.log(err));
 
