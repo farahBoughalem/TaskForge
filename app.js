@@ -1,23 +1,39 @@
+require('dotenv').config();
 const express = require('express');
-const morgan = require('morgan');
 const mongoose = require('mongoose');
-const { mongoURI } = require('./config');
+const http = require('http');
+const socketIo = require('socket.io');
+const path = require('path');
 
-// create express app
+const taskRoutes = require('./routes/taskRoutes');
+const userRoutes = require('./routes/userRoutes');
+
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 
-// connect to mongodb & listen to requests
-mongoose.connect(mongoURI)
-  .then(result => app.listen(3000))
-  .catch(err => console.log(err));
-
-// register the view engine
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
 app.set('view engine', 'ejs');
 
-// middleware & static files
-app.use(express.static('public'));
-app.use(morgan('dev'));
+// Routes
+app.use('/tasks', taskRoutes);
+app.use('/users', userRoutes);
 
-app.get('/', (req, res)=>{
-  res.sendFile('./views/index.html', { root: __dirname });
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.log(err));
+
+// Socket.io Communication
+io.on('connection', (socket) => {
+    console.log('New client connected');
+    socket.on('task-update', (task) => {
+        io.emit('task-update', task); // Broadcast task updates to all clients
+    });
+    socket.on('disconnect', () => console.log('Client disconnected'));
+});
+
+server.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`);
 });
