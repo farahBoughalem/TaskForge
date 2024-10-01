@@ -1,23 +1,25 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-const taskSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  project:{
-    type: Schema.Types.ObjectId,
-    ref: 'Project'
-  },
-  status: {
-    type: String,
-    enum: ["Not Started", "On Track", "At Risk", "Off Track", "Paused", "Done"],
-    default: "Not Started",
-    required: true
-  }
+const TaskSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'in-progress', 'completed'],
+        default: 'pending'
+    },
+    assignedTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    dueDate: {
+        type: Date
+    },
 }, { timestamps: true });
 
-const Task = mongoose.model('Task', taskSchema);
-module.exports = Task;
+module.exports = mongoose.model('Task', TaskSchema);
